@@ -1,7 +1,5 @@
-import { Button } from "@/components/Button";
-import { Badge } from "@/components/Badge";
-import { Field } from "@/components/Field";
-import { Card } from "@/components/Card";
+import { Button, Badge, Field, Card } from "@/src";
+import { ThemeToggle } from "./ThemeToggle";
 
 /* ---------------------------------------------------------------------------
    The playground. Every component, every variant, on one page.
@@ -38,7 +36,10 @@ export default function Page() {
     <main className="mx-auto max-w-3xl px-6 py-16">
       {/* ---------- Masthead ---------- */}
       <header className="pb-10">
-        <Badge tone="accent">v0.1</Badge>
+        <div className="flex items-center justify-between">
+          <Badge tone="accent">v0.1</Badge>
+          <ThemeToggle />
+        </div>
         <h1 className="mt-4 font-display text-4xl font-semibold tracking-[-0.03em] text-ink">
           Design System
         </h1>

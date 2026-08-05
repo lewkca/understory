@@ -1,25 +1,94 @@
 {
-  "name": "araxie-design-system",
+  "name": "@lewkca/design-system",
   "version": "0.1.0",
-  "private": true,
+  "description": "A small, typed React component library built on the araxiemiller.com design language — polymorphic primitives, composition APIs, and accessibility baked into the tokens.",
+  "keywords": [
+    "react",
+    "design-system",
+    "component-library",
+    "ui",
+    "typescript",
+    "tailwindcss",
+    "accessibility",
+    "storybook"
+  ],
+  "author": "Araxie Miller",
+  "license": "MIT",
+  "homepage": "https://lewkca.github.io/araxie-design-system/",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/lewkca/araxie-design-system.git"
+  },
+  "bugs": {
+    "url": "https://github.com/lewkca/araxie-design-system/issues"
+  },
+  "type": "module",
+  "main": "./dist/index.cjs",
+  "module": "./dist/index.mjs",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.mjs",
+      "require": "./dist/index.cjs"
+    },
+    "./styles.css": "./dist/styles.css"
+  },
+  "sideEffects": [
+    "**/*.css"
+  ],
+  "files": [
+    "dist"
+  ],
+  "publishConfig": {
+    "access": "public"
+  },
   "scripts": {
     "dev": "next dev",
-    "build": "next build",
-    "start": "next start",
-    "typecheck": "tsc --noEmit"
+    "build": "npm run build:lib && npm run build:css",
+    "build:lib": "tsup",
+    "build:css": "tailwindcss -i ./src/styles/theme.css -o ./dist/styles.css --minify",
+    "build:next": "next build",
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "storybook": "storybook dev -p 6006",
+    "build-storybook": "storybook build",
+    "changeset": "changeset",
+    "version": "changeset version",
+    "release": "npm run build && changeset publish",
+    "prepublishOnly": "npm run build"
   },
-  "dependencies": {
-    "next": "^16.3.0",
-    "react": "^19.2.8",
-    "react-dom": "^19.2.8"
+  "peerDependencies": {
+    "react": ">=18",
+    "react-dom": ">=18"
   },
   "devDependencies": {
+    "@changesets/cli": "^2.31.1",
+    "@storybook/addon-a11y": "^10.5.6",
+    "@storybook/addon-docs": "^10.5.6",
+    "@storybook/react-vite": "^10.5.6",
+    "@tailwindcss/cli": "^4.3.3",
     "@tailwindcss/postcss": "^4.3.3",
+    "@tailwindcss/vite": "^4.3.3",
+    "@testing-library/dom": "^10.4.1",
+    "@testing-library/jest-dom": "^7.0.0",
+    "@testing-library/react": "^16.3.2",
     "@types/node": "^26.1.2",
     "@types/react": "^19.2.18",
     "@types/react-dom": "^19.2.4",
+    "@vitejs/plugin-react": "^4.7.0",
+    "esbuild-plugin-preserve-directives": "^0.0.11",
+    "jsdom": "^30.0.1",
+    "next": "^16.3.0",
     "postcss": "^8.5.25",
+    "react": "^19.2.8",
+    "react-dom": "^19.2.8",
+    "storybook": "^10.5.6",
     "tailwindcss": "^4.3.3",
-    "typescript": "^5.9.3"
+    "tsup": "^8.5.1",
+    "typescript": "^5.9.3",
+    "vite": "^7.3.6",
+    "vitest": "^4.1.10"
   }
 }

@@ -1,90 +1,139 @@
-# Design System
+# @lewkca/design-system
 
 A small, typed React component library built on the design language from
-[araxiemiller.com](https://www.araxiemiller.com). Tokens are defined once in
-CSS; every component reads from them.
+[araxiemiller.com](https://www.araxiemiller.com). It ships polymorphic
+primitives, composition APIs, and accessibility wired into the tokens — the
+kind of components you *author*, not just spec.
 
-**Stack:** Next.js 16 (App Router) · React 19 · TypeScript · Tailwind CSS v4
+**Stack:** React · TypeScript · Tailwind v4 tokens compiled to a shippable
+stylesheet · Storybook · Changesets.
+
+- 📖 **Live docs (Storybook):** https://lewkca.github.io/araxie-design-system/
+- 📦 **npm:** `@lewkca/design-system`
 
 ---
 
-## Running it
+## Install
+
+```bash
+npm install @lewkca/design-system
+```
+
+`react` and `react-dom` (>=18) are peer dependencies.
+
+## Usage
+
+Import the compiled stylesheet **once** at your app's entry — no Tailwind setup
+required in the consuming app — then use the components anywhere:
+
+```tsx
+import "@lewkca/design-system/styles.css";
+import { Button, Card, Field, Badge } from "@lewkca/design-system";
+
+export function SignIn() {
+  return (
+    <Card>
+      <Card.Header>
+        <Card.Title>Sign in</Card.Title>
+      </Card.Header>
+      <Card.Body>
+        <Field label="Email" placeholder="you@company.com" />
+        <Button style={{ marginTop: 16 }}>Continue</Button>
+      </Card.Body>
+    </Card>
+  );
+}
+```
+
+The package is ESM + CJS with type declarations, tree-shakeable, and RSC-safe
+(only `Field` is marked `"use client"`).
+
+---
+
+## Components
+
+| Component | What it demonstrates |
+| --- | --- |
+| **Button** | A discriminated union — `href` renders `<a>`, its absence renders `<button>`, and each accepts different props, enforced by TypeScript. Three variants × three sizes. |
+| **Card** | A composition API — `Card.Header` / `Card.Title` / `Card.Body`, arranged rather than configured. |
+| **Field** | Accessibility in the primitive — `useId()` + `htmlFor`, `aria-describedby`, `aria-invalid`, with hint and error states. |
+| **Badge** | Status pill in three tones; native `<span>` prop pass-through. |
+
+Full props, live controls, and per-component accessibility notes are in
+[Storybook](https://lewkca.github.io/araxie-design-system/).
+
+---
+
+## Theming
+
+Every token is a CSS variable, so you re-theme by **overriding variables** — no
+rebuild of the library:
+
+```css
+/* your global stylesheet, loaded after the library's styles.css */
+:root {
+  --color-accent: #7c3aed;   /* swap teal for violet, everywhere */
+  --radius-control: 12px;
+}
+```
+
+### Dark mode
+
+A dark theme ships built in. Set `data-theme="dark"` on any ancestor (usually
+`<html>`) and the neutrals remap:
+
+```tsx
+document.documentElement.setAttribute("data-theme", "dark");
+```
+
+---
+
+## Local development
 
 ```bash
 npm install
-npm run dev        # http://localhost:3000
+npm run storybook      # component workbench at :6006
+npm run dev            # Next.js demo playground at :3000
 ```
 
-Other scripts:
+Quality gates:
 
 ```bash
-npm run typecheck  # tsc --noEmit, catches type errors without building
-npm run build      # production build
+npm run typecheck      # tsc --noEmit
+npm test               # Vitest + Testing Library
+npm run build          # tsup (ESM/CJS/d.ts) + compiled styles.css → dist/
+```
+
+### Project layout
+
+```
+src/
+  components/   Button, Badge, Card, Field  (+ *.stories.tsx, *.test.tsx)
+  lib/cn.ts     class-name join helper
+  styles/       theme.css — the single source of truth for tokens
+  docs/         Introduction / Tokens / Accessibility (MDX)
+app/            Next.js demo that consumes the components from source
+.storybook/     Storybook config (a11y addon, docs, dark toggle)
 ```
 
 ---
 
-## How it's organized
+## Releasing
 
-```
-app/
-  globals.css     Design tokens (@theme) + base styles
-  layout.tsx      Root HTML shell, font loading, metadata
-  page.tsx        The playground — every component and variant
-components/
-  Button.tsx      Variants, sizes, polymorphic button/link
-  Badge.tsx       Status pill, three tones
-  Field.tsx       Labelled input with hint + error, a11y wiring
-  Card.tsx        Composable card built from parts
-lib/
-  cn.ts           Class name joining helper
+Versioning is managed with [Changesets](https://github.com/changesets/changesets).
+
+```bash
+npm run changeset      # describe a change; pick a semver bump
+npm run version        # apply pending changesets → bump + CHANGELOG
+npm run release        # build + publish to npm
 ```
 
----
+In CI, the [`Release`](.github/workflows/release.yml) workflow opens a
+"Version Packages" PR from pending changesets and publishes to npm when it's
+merged (needs an `NPM_TOKEN` secret). Every push also runs
+[`CI`](.github/workflows/ci.yml) (typecheck · build · test · Storybook) and
+deploys [Storybook to GitHub Pages](.github/workflows/storybook.yml).
 
-## Design decisions
+## License
 
-**Tokens live in CSS, not a JS config.** Tailwind v4 reads `@theme` in
-`globals.css` and generates utilities from it, so `--color-accent` becomes
-`bg-accent` / `text-accent` automatically. One source of truth, and a designer
-can change the system without touching a component file.
-
-**Variants are lookup objects, not conditionals.** Each component maps its
-variant prop to classes through a `Record<Variant, string>`. Adding a variant to
-the type without adding its styles is a build error rather than a silent
-fallback.
-
-**Button is polymorphic and type-enforced.** Passing `href` renders an `<a>`;
-omitting it renders a `<button>`. This is expressed as a discriminated union, so
-TypeScript rejects `<Button href="..." disabled>` — `disabled` isn't a valid
-anchor attribute.
-
-**Card composes instead of configuring.** `Card.Header` / `Card.Body` /
-`Card.Title` are separate parts rather than props on one component. New layouts
-don't require changing Card.
-
-**Accessibility is in the primitives.** A single `:focus-visible` ring is
-defined in the base layer so it can't be forgotten per-component. `Field` wires
-`htmlFor`, `aria-describedby`, and `aria-invalid`. A `prefers-reduced-motion`
-block disables animation for users who ask for it.
-
----
-
-## Reading order
-
-If you're getting reacquainted with React, read the files in this order:
-
-1. `lib/cn.ts` — smallest possible typed function
-2. `components/Badge.tsx` — props, variants, spreading rest props
-3. `components/Card.tsx` — composition pattern
-4. `components/Field.tsx` — hooks, `"use client"`, accessibility
-5. `components/Button.tsx` — discriminated unions (the hard one)
-
----
-
-## Next steps
-
-- [ ] Add Select, Tooltip, and Dialog
-- [ ] Dark mode via a `[data-theme]` token override
-- [ ] Extract to a published package with Storybook
-- [ ] Add Playwright visual regression tests
+[MIT](LICENSE) © Araxie Miller

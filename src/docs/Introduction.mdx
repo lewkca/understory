@@ -1,0 +1,63 @@
+import { Meta } from "@storybook/addon-docs/blocks";
+
+<Meta title="Overview/Introduction" />
+
+# @lewkca/design-system
+
+A small, typed React component library built on the design language from
+[araxiemiller.com](https://www.araxiemiller.com). It exists to demonstrate
+*authored* components — polymorphic primitives, composition APIs, and
+accessibility wired into the tokens — not just specs.
+
+**Stack:** React · TypeScript · Tailwind v4 tokens compiled to a shippable
+stylesheet · Storybook.
+
+---
+
+## Install
+
+```bash
+npm install @lewkca/design-system
+```
+
+Import the compiled stylesheet once (no Tailwind required in your app), then use
+the components:
+
+```tsx
+import "@lewkca/design-system/styles.css";
+import { Button, Card, Field, Badge } from "@lewkca/design-system";
+
+export function Example() {
+  return (
+    <Card>
+      <Card.Header>
+        <Card.Title>Sign in</Card.Title>
+      </Card.Header>
+      <Card.Body>
+        <Field label="Email" placeholder="you@company.com" />
+        <Button style={{ marginTop: 16 }}>Continue</Button>
+      </Card.Body>
+    </Card>
+  );
+}
+```
+
+---
+
+## What each component demonstrates
+
+| Component | Idea it proves |
+| --- | --- |
+| **Button** | A **discriminated union** — `href` renders `<a>`, its absence renders `<button>`, and the two accept different props, enforced by TypeScript. |
+| **Card** | A **composition API** — `Card.Header` / `Card.Title` / `Card.Body` parts you arrange, instead of prop explosion on a monolith. |
+| **Field** | **Accessibility in the primitive** — `useId()` + `htmlFor`, `aria-describedby`, `aria-invalid`. |
+| **Badge** | The smallest typed component — variant-as-lookup-object, native prop pass-through. |
+
+---
+
+## Theming
+
+Every token is a CSS variable, so you re-theme by overriding variables — no
+rebuild of the library. Flipping `data-theme="dark"` on any ancestor remaps the
+neutrals; see **Overview/Design Tokens**. Use the **Theme** toolbar control
+above to preview light and dark on any story.

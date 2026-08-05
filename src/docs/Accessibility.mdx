@@ -1,0 +1,46 @@
+import { Meta } from "@storybook/addon-docs/blocks";
+
+<Meta title="Overview/Accessibility" />
+
+# Accessibility
+
+Accessibility is treated as a property of the primitives, not a later audit.
+The **Accessibility** panel under every story runs
+[axe](https://github.com/dequelabs/axe-core) live against the rendered output.
+
+## Baked into the base layer
+
+Two things are defined once, globally, so no component can forget them
+(`src/styles/theme.css`):
+
+- **A single focus ring.** `:focus-visible` (not `:focus`) draws a 2px accent
+  outline for keyboard users and stays out of the way on mouse clicks — the
+  default most component libraries get wrong. It applies to every interactive
+  element: links, buttons, inputs, `[tabindex]`.
+- **Reduced motion.** A `prefers-reduced-motion: reduce` block collapses every
+  animation and transition for users who ask their OS to reduce motion.
+
+## Wired into the components
+
+- **Field** — `useId()` generates a stable id shared between `<label htmlFor>`
+  and the input; the hint/error is linked with `aria-describedby`; the error
+  state sets `aria-invalid` so failures are *announced*, not only colored red.
+- **Button** — when rendered as an icon-only control, pass `aria-label`. As a
+  link (`href`) it renders a real `<a>`, so it's keyboard- and
+  screen-reader-navigable as a link, not a fake button.
+- **Badge** — color is not the only signal: keep the text label meaningful
+  (“Scheduled”, not a bare colored dot).
+
+## Contrast & dark mode
+
+The dark theme remaps neutrals and brightens `danger` so text stays legible on
+the dark canvas; the teal accent keeps white button text at roughly 5.5:1.
+Preview any story in both themes with the **Theme** toolbar control and watch
+the a11y panel.
+
+## Checklist for new components
+
+1. Reach for a native, semantic element before a `div`.
+2. Label every control; link help/error text with `aria-describedby`.
+3. Never remove the focus ring — inherit the base one.
+4. Verify the a11y panel is clean in **both** light and dark.
