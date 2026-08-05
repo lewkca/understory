@@ -16,7 +16,7 @@ export type BadgeProps = {
 
 const toneStyles: Record<BadgeTone, string> = {
   neutral: "bg-rule/60 text-ink-muted",
-  accent: "bg-accent/10 text-accent",
+  accent: "bg-accent/10 text-accent-fg",
   danger: "bg-danger/10 text-danger",
 };
 

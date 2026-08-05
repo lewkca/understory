@@ -33,8 +33,9 @@
   --color-ink-muted:  #666666;  /* secondary text */
   --color-ink-subtle: #8A8A8A;  /* tertiary text, placeholders */
   --color-rule:       #E8E6E3;  /* hairline borders + dividers */
-  --color-accent:     #0F766E;  /* teal: links, primary actions */
+  --color-accent:     #0F766E;  /* teal: primary-action fill, focus ring */
   --color-accent-ink: #0B5D56;  /* darker teal for hover states */
+  --color-accent-fg:  #0F766E;  /* teal AS TEXT — see dark override below */
   --color-danger:     #B42318;
 
   /* Type ------------------------------------------------------------------- */
@@ -55,7 +56,10 @@
    Set data-theme="dark" on <html> (or any ancestor) and every token below is
    overridden, cascading through every component. Only neutrals and danger are
    remapped; the teal accent already keeps white button text at ~5.5:1 on the
-   dark canvas, so it carries over unchanged.
+   dark canvas as a FILL, so `--color-accent` carries over unchanged. But the
+   same teal used AS TEXT on a dark surface is too dark to read, so
+   `--color-accent-fg` brightens — one token per job, which is why the accent
+   badge and the primary button can both stay accessible in dark mode.
 --------------------------------------------------------------------------- */
 [data-theme="dark"] {
   --color-canvas:     #0B0B0C;
@@ -64,6 +68,7 @@
   --color-ink-muted:  #A1A1AA;
   --color-ink-subtle: #71717A;
   --color-rule:       #27272A;
+  --color-accent-fg:  #2DD4BF;  /* brightened teal for accent text on dark */
   --color-danger:     #F87171;  /* brighter red stays legible on dark */
 }
 
