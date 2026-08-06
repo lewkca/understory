@@ -1,6 +1,6 @@
 {
   "name": "@lewkca/design-system",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "A small, typed React component library built on the araxiemiller.com design language — polymorphic primitives, composition APIs, and accessibility baked into the tokens.",
   "keywords": [
     "react",
@@ -45,9 +45,10 @@
   },
   "scripts": {
     "dev": "next dev",
-    "build": "npm run build:lib && npm run build:css",
-    "build:lib": "tsup",
+    "build": "npm run build:lib && npm run build:css && npm run verify:dist",
+    "build:lib": "tsup && node scripts/fix-dist-extensions.mjs",
     "build:css": "tailwindcss -i ./src/styles/theme.css -o ./dist/styles.css --minify",
+    "verify:dist": "node scripts/verify-dist.mjs",
     "build:next": "next build",
     "typecheck": "tsc --noEmit",
     "test": "vitest run",
