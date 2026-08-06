@@ -1,16 +1,28 @@
 name: Release
 
-# Uses Changesets to automate publishing to npm. On a push to main:
+# Uses Changesets to publish to npm:
 #   • if there are unconsumed changesets, it opens/updates a "Version Packages"
 #     PR that bumps the version and updates the CHANGELOG;
-#   • when that PR is merged, it publishes the new version to npm.
+#   • otherwise it publishes the current version to npm.
 #
-# Requires an NPM_TOKEN secret (an npm automation token with publish rights to
-# the @lewkca scope) in the repo's Actions secrets.
+# MANUAL TRIGGER ONLY. This used to run on every push to main, but publishing
+# is currently done by hand (`npm publish` locally, which prompts for the 2FA
+# one-time password). With no NPM_TOKEN secret set, an automatic run failed on
+# every single push and left a permanent red X on the repo.
+#
+# To use this workflow you need ONE of:
+#   • an NPM_TOKEN secret — an npm granular access token with read/write on the
+#     @lewkca scope. Note these expire (~90 days max), after which this breaks
+#     again silently; or
+#   • trusted publishing via OIDC — configure @lewkca/design-system's trusted
+#     publisher on npmjs.com to point at this repo + workflow, then drop the
+#     NODE_AUTH_TOKEN env below entirely. No stored credential, no expiry.
+#     `id-token: write` is already granted below.
+#
+# Until then, publish locally:  npm login && npm publish --access public
 
 on:
-  push:
-    branches: [main]
+  workflow_dispatch:
 
 permissions:
   contents: write
