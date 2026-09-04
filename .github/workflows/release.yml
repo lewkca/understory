@@ -29,10 +29,6 @@ on:
         description: "Also deprecate @lewkca/design-system (one-time, after the first Understory publish)"
         type: boolean
         default: false
-      force_public:
-        description: "Force @lewkca/understory to public access (fixes a first publish that landed restricted)"
-        type: boolean
-        default: false
 
 permissions:
   contents: write
@@ -53,28 +49,24 @@ jobs:
 
       - run: npm ci
 
-      # Skipped in a force_public repair run: 0.2.0 is already on the registry,
-      # and npm refuses to publish over an existing version, which would fail
-      # the job before the repair step below could run.
+      # GOTCHA — a scoped package's FIRST publish must be public, or npm creates
+      # it RESTRICTED and it 404s for everyone but the owner (the version and
+      # tarball endpoints still 200, which makes it look published; the tells are
+      # a 404 packument, a 403 on npmjs.com, and `npm install` failing).
+      # access:"public" is set in .changeset/config.json AND package.json
+      # publishConfig, but the OIDC trusted-publishing path did not apply it on
+      # 0.2.0's first publish.
+      # It cannot be repaired from CI: `npm access set status=public` counts as
+      # an account change, and npm now returns 403 for any token that bypasses
+      # 2FA. Fix it in the npmjs.com UI (package → Settings → public), or with
+      # `npm login` locally so the OTP prompt can be answered.
       - name: Create Release PR or publish to npm
-        if: ${{ !inputs.force_public }}
         uses: changesets/action@v1
         with:
           version: npm run version
           publish: npm run release
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
-
-      # A scoped package's FIRST publish must set --access public or npm creates
-      # it restricted, which 404s for everyone but the owner. Changesets passes
-      # access from .changeset/config.json, but the OIDC publishing path does not
-      # always apply it. Runs before the deprecate so we never point people at a
-      # package they cannot install.
-      - name: Force public access
-        if: ${{ inputs.force_public }}
-        run: npm access set status=public @lewkca/understory
-        env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
 
       # One-time, opt-in. Points anyone still installing the old name at the new
