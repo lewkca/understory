@@ -1,4 +1,6 @@
-# @lewkca/design-system
+# Understory
+
+*The forest layer beneath the canopy that everything else grows out of.*
 
 A small, typed React component library built on the design language from
 [araxiemiller.com](https://www.araxiemiller.com). It ships polymorphic
@@ -9,7 +11,8 @@ kind of components you *author*, not just spec.
 stylesheet · Storybook · Changesets.
 
 - 📖 **Live docs (Storybook):** https://lewkca.github.io/araxie-design-system/
-- 📦 **npm:** `@lewkca/design-system`
+- 📦 **npm:** `@lewkca/design-system` (still published under its original name;
+  `@lewkca/understory` ships with the next release)
 
 ---
 

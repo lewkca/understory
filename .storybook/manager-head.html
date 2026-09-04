@@ -1,0 +1,37 @@
+<!-- The manager (sidebar/toolbar) renders outside the preview iframe, so it does
+     not inherit preview-head.html. Load Inter here too, or the chrome falls
+     back to system sans while the stories render in the real face. -->
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link
+  href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap"
+  rel="stylesheet"
+/>
+<!-- Tab title.
+
+     Storybook hard-codes "<project> - Storybook" into the manager's index.html
+     and exposes no config for it, then rewrites the title to
+     "<Story> ⋅ Storybook" on every route change. A second <title> tag loses to
+     the first, and a one-shot assignment is overwritten as soon as a story is
+     selected — so swap the trailing product name each time the title changes.
+     brandTitle in manager.ts covers the sidebar; this covers the tab. -->
+<script>
+  (function () {
+    var NAME = "Understory";
+
+    function brand() {
+      // "Button / Primary ⋅ Storybook" -> "Button / Primary ⋅ Understory",
+      // and the initial "storybook - Storybook" -> the bare product name.
+      var next = /(⋅|·)\s*Storybook\s*$/.test(document.title)
+        ? document.title.replace(/(⋅|·)\s*Storybook\s*$/, "$1 " + NAME)
+        : NAME;
+
+      if (document.title !== next) document.title = next;
+    }
+
+    brand();
+
+    var el = document.querySelector("title");
+    if (el) new MutationObserver(brand).observe(el, { childList: true });
+  })();
+</script>
