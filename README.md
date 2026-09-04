@@ -11,15 +11,14 @@ kind of components you *author*, not just spec.
 stylesheet · Storybook · Changesets.
 
 - 📖 **Live docs (Storybook):** https://lewkca.github.io/araxie-design-system/
-- 📦 **npm:** `@lewkca/design-system` (still published under its original name;
-  `@lewkca/understory` ships with the next release)
+- 📦 **npm:** `@lewkca/understory`
 
 ---
 
 ## Install
 
 ```bash
-npm install @lewkca/design-system
+npm install @lewkca/understory
 ```
 
 `react` and `react-dom` (>=18) are peer dependencies.
@@ -30,8 +29,8 @@ Import the compiled stylesheet **once** at your app's entry — no Tailwind setu
 required in the consuming app — then use the components anywhere:
 
 ```tsx
-import "@lewkca/design-system/styles.css";
-import { Button, Card, Field, Badge } from "@lewkca/design-system";
+import "@lewkca/understory/styles.css";
+import { Button, Card, Field, Badge } from "@lewkca/understory";
 
 export function SignIn() {
   return (

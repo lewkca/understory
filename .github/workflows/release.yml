@@ -14,7 +14,7 @@ name: Release
 #   • an NPM_TOKEN secret — an npm granular access token with read/write on the
 #     @lewkca scope. Note these expire (~90 days max), after which this breaks
 #     again silently; or
-#   • trusted publishing via OIDC — configure @lewkca/design-system's trusted
+#   • trusted publishing via OIDC — configure @lewkca/understory's trusted
 #     publisher on npmjs.com to point at this repo + workflow, then drop the
 #     NODE_AUTH_TOKEN env below entirely. No stored credential, no expiry.
 #     `id-token: write` is already granted below.

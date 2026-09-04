@@ -1,11 +1,11 @@
 /* ---------------------------------------------------------------------------
-   @lewkca/design-system — public entry point
+   @lewkca/understory — public entry point
 
    Everything a consumer can import from the package root is re-exported here.
    Styles ship separately as a compiled stylesheet:
 
-       import "@lewkca/design-system/styles.css";
-       import { Button, Card } from "@lewkca/design-system";
+       import "@lewkca/understory/styles.css";
+       import { Button, Card } from "@lewkca/understory";
 --------------------------------------------------------------------------- */
 
 export { Button } from "./components/Button";
