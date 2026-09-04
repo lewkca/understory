@@ -14,13 +14,13 @@
   ],
   "author": "Araxie Miller",
   "license": "MIT",
-  "homepage": "https://lewkca.github.io/araxie-design-system/",
+  "homepage": "https://lewkca.github.io/understory/",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/lewkca/araxie-design-system.git"
+    "url": "git+https://github.com/lewkca/understory.git"
   },
   "bugs": {
-    "url": "https://github.com/lewkca/araxie-design-system/issues"
+    "url": "https://github.com/lewkca/understory/issues"
   },
   "type": "module",
   "main": "./dist/index.cjs",

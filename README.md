@@ -10,7 +10,7 @@ kind of components you *author*, not just spec.
 **Stack:** React · TypeScript · Tailwind v4 tokens compiled to a shippable
 stylesheet · Storybook · Changesets.
 
-- 📖 **Live docs (Storybook):** https://lewkca.github.io/araxie-design-system/
+- 📖 **Live docs (Storybook):** https://lewkca.github.io/understory/
 - 📦 **npm:** `@lewkca/understory`
 
 ---
@@ -62,7 +62,7 @@ The package is ESM + CJS with type declarations, tree-shakeable, and RSC-safe
 | **Badge** | Status pill in three tones; native `<span>` prop pass-through. |
 
 Full props, live controls, and per-component accessibility notes are in
-[Storybook](https://lewkca.github.io/araxie-design-system/).
+[Storybook](https://lewkca.github.io/understory/).
 
 ---
 
