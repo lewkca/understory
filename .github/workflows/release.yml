@@ -49,17 +49,21 @@ jobs:
 
       - run: npm ci
 
-      # GOTCHA — a scoped package's FIRST publish must be public, or npm creates
-      # it RESTRICTED and it 404s for everyone but the owner (the version and
-      # tarball endpoints still 200, which makes it look published; the tells are
-      # a 404 packument, a 403 on npmjs.com, and `npm install` failing).
-      # access:"public" is set in .changeset/config.json AND package.json
-      # publishConfig, but the OIDC trusted-publishing path did not apply it on
-      # 0.2.0's first publish.
-      # It cannot be repaired from CI: `npm access set status=public` counts as
-      # an account change, and npm now returns 403 for any token that bypasses
-      # 2FA. Fix it in the npmjs.com UI (package → Settings → public), or with
-      # `npm login` locally so the OTP prompt can be answered.
+      # A BRAND-NEW package takes several minutes to become installable, and the
+      # registry looks broken in the meantime. On 0.2.0's first publish the
+      # version and tarball endpoints returned 200 while the packument 404'd and
+      # `npm install` failed — which reads exactly like a package published
+      # restricted instead of public. It was not; it was propagation. Wait and
+      # retry before changing anything.
+      #
+      # Do NOT use npmjs.com to check health: the website 403s non-browser
+      # clients, so curl gets 403 for react too. Check the registry API instead,
+      # or just try installing it.
+      #
+      # Note this action looks for an env var literally named NPM_TOKEN and logs
+      # "No NPM_TOKEN found ... using npm trusted publishing" when it only finds
+      # NODE_AUTH_TOKEN. The publish still authenticates, because setup-node
+      # writes the token into .npmrc, which npm itself reads.
       - name: Create Release PR or publish to npm
         uses: changesets/action@v1
         with:
