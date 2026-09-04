@@ -5,10 +5,9 @@ name: Release
 #     PR that bumps the version and updates the CHANGELOG;
 #   • otherwise it publishes the current version to npm.
 #
-# MANUAL TRIGGER ONLY. This used to run on every push to main, but publishing
-# is currently done by hand (`npm publish` locally, which prompts for the 2FA
-# one-time password). With no NPM_TOKEN secret set, an automatic run failed on
-# every single push and left a permanent red X on the repo.
+# MANUAL TRIGGER ONLY. This used to run on every push to main, but with no
+# NPM_TOKEN secret set an automatic run failed on every push and left a
+# permanent red X on the repo.
 #
 # To use this workflow you need ONE of:
 #   • an NPM_TOKEN secret — an npm granular access token with read/write on the
@@ -17,12 +16,19 @@ name: Release
 #   • trusted publishing via OIDC — configure @lewkca/understory's trusted
 #     publisher on npmjs.com to point at this repo + workflow, then drop the
 #     NODE_AUTH_TOKEN env below entirely. No stored credential, no expiry.
-#     `id-token: write` is already granted below.
+#     `id-token: write` is already granted below. Worth switching to once
+#     @lewkca/understory exists, since npm only lets you configure a trusted
+#     publisher for a package that has already been published once.
 #
-# Until then, publish locally:  npm login && npm publish --access public
+# To publish by hand instead:  npm login && npm publish --access public
 
 on:
   workflow_dispatch:
+    inputs:
+      deprecate_old:
+        description: "Also deprecate @lewkca/design-system (one-time, after the first Understory publish)"
+        type: boolean
+        default: false
 
 permissions:
   contents: write
@@ -50,4 +56,15 @@ jobs:
           publish: npm run release
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+
+      # One-time, opt-in. Points anyone still installing the old name at the new
+      # one. Deprecating does NOT unpublish: existing installs keep working, and
+      # npm just prints this message on install.
+      - name: Deprecate the previous package name
+        if: ${{ inputs.deprecate_old }}
+        run: >
+          npm deprecate @lewkca/design-system
+          "Renamed to @lewkca/understory. Same API, tokens and exports — update your import specifier."
+        env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
