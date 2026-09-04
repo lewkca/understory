@@ -1,5 +1,5 @@
 {
-  "name": "@lewkca/design-system",
+  "name": "@lewkca/understory",
   "version": "0.1.1",
   "description": "Understory — a small, typed React component library built on the araxiemiller.com design language, with polymorphic primitives, composition APIs, and accessibility baked into the tokens.",
   "keywords": [
