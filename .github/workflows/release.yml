@@ -73,7 +73,7 @@ jobs:
       # package they cannot install.
       - name: Force public access
         if: ${{ inputs.force_public }}
-        run: npm access public @lewkca/understory
+        run: npm access set status=public @lewkca/understory
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
 
