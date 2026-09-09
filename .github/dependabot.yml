@@ -23,6 +23,17 @@ updates:
       - dependency-name: vite
         update-types:
           - version-update:semver-major
+      # Follows the vite pin: plugin-react 6 needs a newer Vite than ^7, so
+      # npm ci fails with ERESOLVE. Unignore when the vite pin lifts.
+      - dependency-name: "@vitejs/plugin-react"
+        update-types:
+          - version-update:semver-major
+      # TypeScript 7 is the native compiler rewrite; tsup's .d.ts generation
+      # still uses the old compiler API and dies with
+      # "Cannot read properties of undefined (reading 'useCaseSensitiveFileNames')".
+      - dependency-name: typescript
+        update-types:
+          - version-update:semver-major
 
   - package-ecosystem: github-actions
     directory: "/"
