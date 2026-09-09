@@ -22,6 +22,9 @@ export default defineConfig({
     "src/**/*.{ts,tsx}",
     "!src/**/*.stories.tsx",
     "!src/**/*.test.{ts,tsx}",
+    // Test-only helpers. Without this they compile into dist/ and the
+    // published package would carry axe-core as a real import.
+    "!src/test/**",
   ],
   format: ["esm", "cjs"],
   outExtension({ format }) {

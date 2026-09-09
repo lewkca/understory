@@ -1,5 +1,10 @@
 # Understory
 
+[![npm](https://img.shields.io/npm/v/%40lewkca%2Funderstory?style=flat-square&color=0F766E&label=npm)](https://www.npmjs.com/package/@lewkca/understory)
+[![CI](https://img.shields.io/github/actions/workflow/status/lewkca/understory/ci.yml?style=flat-square&branch=main&label=CI)](https://github.com/lewkca/understory/actions/workflows/ci.yml)
+[![Storybook](https://img.shields.io/badge/docs-Storybook-0F766E?style=flat-square)](https://lewkca.github.io/understory/)
+[![License](https://img.shields.io/npm/l/%40lewkca%2Funderstory?style=flat-square&color=0F766E)](LICENSE)
+
 *The forest layer beneath the canopy that everything else grows out of.*
 
 A small, typed React component library built on the design language from
@@ -90,6 +95,22 @@ document.documentElement.setAttribute("data-theme", "dark");
 
 ---
 
+## Accessibility
+
+Every component is checked with [axe-core](https://github.com/dequelabs/axe-core)
+in the unit suite, so a regression fails CI instead of surfacing later in the
+docs. The cases cover the states that change semantics rather than colour:
+Button's `<button>` and `<a>` branches, Field with a hint versus in its error
+state, the full Card composition.
+
+Colour contrast is deliberately not checked there. jsdom does no layout and the
+test environment runs with `css: false`, so there is no computed colour to
+measure and axe reports contrast as "incomplete" indefinitely. Contrast is
+checked in Storybook, where
+[addon-a11y](https://storybook.js.org/addons/@storybook/addon-a11y) runs axe
+against a real browser; the audited token pairs are documented in
+`src/styles/theme.css`.
+
 ## Local development
 
 ```bash
@@ -132,8 +153,8 @@ npm run release        # build + publish to npm
 
 In CI, the [`Release`](.github/workflows/release.yml) workflow opens a
 "Version Packages" PR from pending changesets and publishes to npm when it's
-merged (needs an `NPM_TOKEN` secret). Every push also runs
-[`CI`](.github/workflows/ci.yml) (typecheck · build · test · Storybook) and
+merged. Every push also runs
+[`CI`](.github/workflows/ci.yml) (typecheck · build · test + axe · Storybook) and
 deploys [Storybook to GitHub Pages](.github/workflows/storybook.yml).
 
 ## License

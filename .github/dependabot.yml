@@ -1,0 +1,31 @@
+version: 2
+updates:
+  - package-ecosystem: npm
+    directory: "/"
+    schedule:
+      interval: weekly
+      day: monday
+    open-pull-requests-limit: 5
+    groups:
+      # Storybook packages have to move in lockstep: the SB10 export paths
+      # (storybook/theming/create, storybook/manager-api) differ by minor.
+      storybook:
+        patterns:
+          - storybook
+          - "@storybook/*"
+      dev-dependencies:
+        dependency-type: development
+        update-types:
+          - minor
+          - patch
+    ignore:
+      # Vite 8 pulls an esbuild that conflicts with tsup. ^7 is deliberate.
+      - dependency-name: vite
+        update-types:
+          - version-update:semver-major
+
+  - package-ecosystem: github-actions
+    directory: "/"
+    schedule:
+      interval: weekly
+      day: monday
