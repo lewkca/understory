@@ -65,7 +65,7 @@ jobs:
       # NODE_AUTH_TOKEN. The publish still authenticates, because setup-node
       # writes the token into .npmrc, which npm itself reads.
       - name: Create Release PR or publish to npm
-        uses: changesets/action@v1
+        uses: changesets/action@v2
         with:
           version: npm run version
           publish: npm run release
